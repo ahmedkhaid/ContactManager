@@ -1,0 +1,121 @@
+﻿@{
+    ViewBag.Title = "Create Person";
+    ViewBag.PageContent="Home";
+    ViewBag.PageDirection="index";
+}
+@model PersonAddRequest
+<h2>create person</h2>
+<div class="center-box">
+<form action="~/persons/Create" method="post">
+    <div class="form-field flex">
+        <div class="w-25">
+            <label asp-for="PersonName" class="form-label pt">Person name</label>
+        </div>
+        <div class="flex-1"><input type="text" asp-for="@Model.PersonName" class="form-input" /></div>
+        @* <span asp-validation-for="PersonName" class="text-red"></span> *@
+    </div>
+    <div class="form-field flex">
+        <div class="w-25">
+            <label for="Email" class="form-label pt">Email</label>
+            @* <span asp-validation-for="Email" class="text-red"></span> *@
+        </div>
+        <div class="flex-1">
+            <input type="email" asp-for="@Model.Email" class="form-input" />
+        </div>
+    </div>
+    <div class="form-field flex">
+        <div class="w-25">
+            <label for="DateOfBirth" class="form-label pt">Date of Birth</label>
+        </div>
+        <div class="flex-1">
+            <input type="date" id="DateOfBirth" name="DateOfBirth" class="form-input" />
+        </div>
+    </div>
+    <div class="form-field flex">
+        <div class="w-25">
+            <label for="Gender" class="form-label pt">Gender</label>
+        </div>
+        @{
+            string[] Genders = (string[])Enum.GetNames(typeof(GenderOptions));
+        }
+        <div class="flex-1">
+            @foreach (string gender in Genders)
+            {
+                <input type="radio" asp-for="Gender" value="@gender" />
+                <label asp-for="@gender">@gender</label>
+            }
+            @* <input type="radio" id="Male" name="Gender" value="Male" />
+            <label for="Male">Male</label>
+
+            <input type="radio" id="Female" name="Gender" value="Female" class="ml" />
+            <label for="Female">Female</label>
+
+            <input type="radio" id="Other" name="Gender" value="Other" class="ml" />
+            <label for="Other">Other</label> *@
+        </div>
+    </div>
+    <div class="form-field flex">
+        <div class="w-25">
+            <label class="form-label" for="CountryID">Country</label>
+        </div>
+        <div class="flex-1">
+
+            <select asp-for="@Model.CountryID" asp-items="@ViewBag.countriesID" class="form-input">
+                <option value="">Please Select</option>
+
+                @* @foreach (CountryResponse response in Model)
+                {
+                    <option value="@response.CountryID">@response.CountryName</option>
+                } *@
+            </select>
+        </div>
+    </div>
+    <div class="form-field flex">
+        <div class="w-25">
+            <label for="Address" class="form-label pt">Address</label>
+        </div>
+        <div class="flex-1">
+            <textarea asp-for="@Model.Address" class="form-input"></textarea>
+        </div>
+    </div>
+
+    @*ReceiveNewsLetters*@
+    <div class="form-field flex">
+        <div class="w-25">
+        </div>
+        <div class="flex-1">
+            <input type="checkbox" name="ReceiveNewsLetters" id="ReceiveNewsLetters" value="true" />
+            <label for="ReceiveNewsLetters" class="form-label">Receive News Letters</label>
+        </div>
+    </div>
+    <div class="form-field flex">
+        <div class="w-25">
+        </div>
+        <div class="flex-1">
+            <button class="button button-green-back">Create</button>
+            <div class="text-red" asp-validation-summary="All"></div>
+            <ul>
+                @if (ViewBag.ErrorMessage!=null)
+                {
+                    @foreach (var error in ViewBag.ErrorMessage)
+                    {
+                        <li>@error</li>
+                    }
+                }
+
+            </ul>
+
+        </div>
+     
+
+    </div>
+</form>
+</div>
+ @section scripts{
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" asp-fallback-test="window.jQuery" asp-fallback-src="~/jquery.min.js" asp-fallback-test=""></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.4/jquery.validate.min.js" asp-fallback-test="window.jQuery.validator" asp-fallback-src="~/jquery.validate.min.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js" asp-fallback-test="window.jQuery.validator.unobtrusive" asp-fallback-src="~/jquery.validate.unobtrusive.min.js"></script>
+} 

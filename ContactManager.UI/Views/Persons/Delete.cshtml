@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "Delete Person";
+    ViewBag.PageContent="Home";
+    ViewBag.PageDirection="index";
+}
+@model PersonResponse
+<h2>create person</h2>
+<div class="center-box">
+    <form action="~/persons/Delete/@Model.PersonID" method="post">
+        <div class="form-field flex">
+            <div class="w-25">
+                <label asp-for="PersonName" class="form-label pt">Person name</label>
+            </div>
+            <div class="flex-1"><input type="text" asp-for="@Model.PersonName" class="form-input" disabled="disabled"/></div>
+            @* <span asp-validation-for="PersonName" class="text-red"></span> *@
+        </div>
+        <div class="form-field flex">
+            <div class="w-25">
+                <label for="Email" class="form-label pt">Email</label>
+                @* <span asp-validation-for="Email" class="text-red"></span> *@
+            </div>
+            <div class="flex-1">
+                <input type="email" asp-for="@Model.Email" class="form-input" disabled="disabled" />
+            </div>
+        </div>
+       
+
+        @*ReceiveNewsLetters*@
+      
+        <div class="form-field flex">
+            <div class="w-25">
+            </div>
+            <div class="flex-1">
+                <button class="button button-red-back">Delete</button>
+                <div class="text-red" asp-validation-summary="All"></div>
+                <ul>
+                    @if (ViewBag.ErrorMessage!=null)
+                    {
+                        @foreach (var error in ViewBag.ErrorMessage)
+                        {
+                            <li>@error</li>
+                        }
+                    }
+
+                </ul>
+
+            </div>
+
+
+        </div>
+    </form>
+</div>
