@@ -6,6 +6,9 @@ using Repository;
 using Serilog;
 using ServiceContracts;
 using Services;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using ContactManager.Core.Domain.IdentityEntites;
+using Microsoft.AspNetCore.Identity;
 
 namespace CRUDExample.StartUpExtenstions
 {
@@ -22,8 +25,8 @@ namespace CRUDExample.StartUpExtenstions
             services.AddScoped<IPersonUpdateService, PersonUpdateService>();
             services.AddScoped<ICountriesAddService, CountriesAddService>();
             services.AddScoped<ICountriesUploadService, CountriesUploadService>();
-
-
+            services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<PersonDbContext>().AddDefaultTokenProviders()
+                .AddUserStore<UserStore<ApplicationUser, ApplicationRole, PersonDbContext, Guid>>().AddRoleStore<RoleStore<ApplicationRole, PersonDbContext, Guid>>();
             //builder.Host.ConfigureLogging(loggingProvider =>
             //{
             //    loggingProvider.ClearProviders();

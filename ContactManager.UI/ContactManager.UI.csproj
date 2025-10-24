@@ -29,6 +29,6 @@
     <ProjectReference Include="..\ContactManager.Infrastructure\ContactManager.Infrastructure.csproj" />
   </ItemGroup>
 	<ItemGroup>
-		<InteranalVisablesTo Include="ContactManager.IntegrationTest"/>
+		<InteranalVisablesTo Include="ContactManager.IntegrationTest" />
 	</ItemGroup>
 </Project>

@@ -14,6 +14,7 @@ builder.Services.ConfigureServices(builder.Configuration, builder.Host);
 var app = builder.Build();
 app.UseStaticFiles();
 app.UseSerilogRequestLogging();
+
 if (builder.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();

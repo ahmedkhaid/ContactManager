@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using ContactManager.Core.Domain.IdentityEntites;
 namespace Entities
 {
-    public class PersonDbContext:IdentityDbContext
+    public class PersonDbContext:IdentityDbContext<ApplicationUser,ApplicationRole,Guid>
     {
        public virtual DbSet<Person> Persons {  get; set; }
         public virtual DbSet<Country> Countries { get; set; }
