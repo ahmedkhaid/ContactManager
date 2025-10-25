@@ -22,6 +22,8 @@ namespace ContactManager.Core.DTO
         [DataType(DataType.Password)]
         public string Password { get; set; }
         [Required(ErrorMessage = "the confirmedPassword can't be null")]
+        [Compare("Password",ErrorMessage ="the confirmed password Should be equal to Password")]
+        [DataType(DataType.Password)]
         public string? ConfirmPassword { get; set; }
 
     }

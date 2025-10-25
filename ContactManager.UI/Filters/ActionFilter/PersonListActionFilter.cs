@@ -44,7 +44,7 @@ namespace CRUDExample.Filters.ActionFilter
                    { nameof(PersonResponse.Country),"Country"},
                    { nameof(PersonResponse.DateOfBirth),"Date of birth"},
             };
-            personController.ViewBag.FilterOptions = FilterOptions;
+            personController.ViewBag.SearchFields = FilterOptions;
         }
         //setting the sortBy as PersonName if itnot the sortby not equal one of the Person attribute
         

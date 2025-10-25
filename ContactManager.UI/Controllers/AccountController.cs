@@ -10,9 +10,11 @@ namespace ContactManager.UI.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _manager;
-        public AccountController(UserManager<ApplicationUser> manager)
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        public AccountController(UserManager<ApplicationUser> manager, SignInManager<ApplicationUser> signInManager)
         {
             _manager = manager;
+            _signInManager=signInManager;
         }
         [HttpGet]
         public IActionResult Register()
@@ -27,7 +29,7 @@ namespace ContactManager.UI.Controllers
                 return View(dTORegister);
 
             }
-            ApplicationUser User = new ApplicationUser()
+            ApplicationUser user = new ApplicationUser()
             {
                 Email = dTORegister.Email,
                 PhoneNumber=dTORegister.Phone,
@@ -35,7 +37,7 @@ namespace ContactManager.UI.Controllers
                 PersonName = dTORegister.PersonName,
             };
            
-          IdentityResult result= await _manager.CreateAsync(User,dTORegister.Password);
+          IdentityResult result= await _manager.CreateAsync(user,dTORegister.Password);
             if(result.Succeeded==false)
             {
                 foreach(var error in result.Errors)
@@ -45,6 +47,8 @@ namespace ContactManager.UI.Controllers
                 }
                 return View(dTORegister);
             }
+           await _signInManager.SignInAsync(user,isPersistent:false);
+             
           
             return RedirectToAction(nameof(PersonsController.Index), "Persons");
 
