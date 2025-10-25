@@ -32,6 +32,7 @@ namespace CRUDExample.Filters.ActionFilter
                 {
                     personController.ViewBag.sortBy=parameters["sortBy"];
                 }
+             
                 
             }
             Dictionary<string, string> FilterOptions = new Dictionary<string, string>()
