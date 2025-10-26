@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ContactManager.Core.Domain.IdentityEntites;
 using ContactManager.Core.DTO;
 using CRUDExample.Controllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using ContactManager.Core.Domain.IdentityEntites;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 namespace ContactManager.UI.Controllers
 {
-    [Route("[controller]/[action]")]
+    //applying Conventional routing
+    //[Route("[controller]/[action]")]
+    [AllowAnonymous]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _manager;
@@ -33,8 +36,9 @@ namespace ContactManager.UI.Controllers
             {
                 Email = dTORegister.Email,
                 PhoneNumber=dTORegister.Phone,
-                UserName=dTORegister.PersonName,
+                UserName=dTORegister.Email,
                 PersonName = dTORegister.PersonName,
+               
             };
            
           IdentityResult result= await _manager.CreateAsync(user,dTORegister.Password);
@@ -53,6 +57,51 @@ namespace ContactManager.UI.Controllers
             return RedirectToAction(nameof(PersonsController.Index), "Persons");
 
             //since we are getting the value from controlelr to the view  we can use
+        }
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginDTO loginDTO,string?ReturnUrl)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Erros=ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                return View(loginDTO);
+            }
+            var result = await _signInManager.PasswordSignInAsync(loginDTO.Email, loginDTO.Password, isPersistent: false, lockoutOnFailure: false);
+            if (result.Succeeded)
+            {
+                if(!string.IsNullOrEmpty(ReturnUrl)&&Url.IsLocalUrl(ReturnUrl))
+                {
+                    return LocalRedirect(ReturnUrl);
+                }
+                return RedirectToAction(nameof(PersonsController.Index), "Persons");
+            }
+            ModelState.AddModelError("Login", "User name or password incorrect");
+
+            return View(loginDTO);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(PersonsController.Index), "Persons");
+        }
+      
+        public async Task<IActionResult>IsEmailRegistered(string email)
+        {
+            ApplicationUser? user =await _manager.FindByEmailAsync(email);
+            if(user==null)
+            {
+                return Json(true);
+            }   
+            else
+            {
+                return Json(false);
+            }
         }
     }
 }

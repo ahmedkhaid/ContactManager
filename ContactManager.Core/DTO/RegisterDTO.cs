@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace ContactManager.Core.DTO
         [DataType(DataType.PhoneNumber)]
          public string ?Phone {  get; set; }
         [Required(ErrorMessage = "the Email can't be null")]
+        [Remote("IsEmailRegistered", controller:"Account", ErrorMessage = "the name Email exist")]
         public string? Email { get; set; }
         [Required(ErrorMessage = "the Password can't be null")]
         [DataType(DataType.Password)]

@@ -9,6 +9,7 @@ using Services;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using ContactManager.Core.Domain.IdentityEntites;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CRUDExample.StartUpExtenstions
 {
@@ -25,8 +26,23 @@ namespace CRUDExample.StartUpExtenstions
             services.AddScoped<IPersonUpdateService, PersonUpdateService>();
             services.AddScoped<ICountriesAddService, CountriesAddService>();
             services.AddScoped<ICountriesUploadService, CountriesUploadService>();
-            services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<PersonDbContext>().AddDefaultTokenProviders()
+            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+            {
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength=1;
+            }).AddEntityFrameworkStores<PersonDbContext>().AddDefaultTokenProviders()
                 .AddUserStore<UserStore<ApplicationUser, ApplicationRole, PersonDbContext, Guid>>().AddRoleStore<RoleStore<ApplicationRole, PersonDbContext, Guid>>();
+            //configure authorization policy
+            services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy=new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+            });
+            //cnifigure the cokkies adding which url should be redirected to
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath="/Account/Login";
+            });
             //builder.Host.ConfigureLogging(loggingProvider =>
             //{
             //    loggingProvider.ClearProviders();

@@ -28,10 +28,18 @@ if (builder.Environment.IsEnvironment("Test")==false)
     Rotativa.AspNetCore.RotativaConfiguration.Setup("wwwroot", wkhtmltopdfRelativePath: "Rotativa");
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();   
+app.UseAuthorization();
 app.MapControllers();
+app.UseEndpoints(Endpoint =>
+{
+    Endpoint.MapControllerRoute(name: "Default", pattern: "{Controller}/{action}");
+});
 app.Logger.LogCritical("the error is critical");
 app.Logger.LogDebug("the error need to be debug");
+app.UseHttpLogging();
 app.Run();
-app.UseHttpLogging();//middleware for logging request and response details in the log providers 
+
+//middleware for logging request and response details in the log providers 
 
 public partial class Program { }

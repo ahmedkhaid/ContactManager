@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRUDExample.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         [Route("~/Error")]
