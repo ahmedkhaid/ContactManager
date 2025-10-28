@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ContactManager.Core.Enums;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -27,6 +28,7 @@ namespace ContactManager.Core.DTO
         [Compare("Password",ErrorMessage ="the confirmed password Should be equal to Password")]
         [DataType(DataType.Password)]
         public string? ConfirmPassword { get; set; }
-
+       
+        public UserOptionType UserType {  get; set; }
     }
 }

@@ -14,8 +14,11 @@ namespace ContactManager.UI.Controllers
     {
         private readonly UserManager<ApplicationUser> _manager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        public AccountController(UserManager<ApplicationUser> manager, SignInManager<ApplicationUser> signInManager)
+        private readonly RoleManager<ApplicationRole> _roleManager;
+        public AccountController(UserManager<ApplicationUser> manager, SignInManager<ApplicationUser> signInManager,RoleManager<ApplicationRole>roleManager)
+
         {
+            _roleManager = roleManager;  
             _manager = manager;
             _signInManager=signInManager;
         }
@@ -41,7 +44,7 @@ namespace ContactManager.UI.Controllers
                
             };
            
-          IdentityResult result= await _manager.CreateAsync(user,dTORegister.Password);
+          IdentityResult result= await _manager.CreateAsync(user,dTORegister.Password);//create the application USer as User in the identuty data base
             if(result.Succeeded==false)
             {
                 foreach(var error in result.Errors)
@@ -50,6 +53,20 @@ namespace ContactManager.UI.Controllers
 
                 }
                 return View(dTORegister);
+            }
+            if(dTORegister.UserType == Core.Enums.UserOptionType.Admin)
+            {
+                if(await _roleManager.FindByNameAsync(Core.Enums.UserOptionType.Admin.ToString()) is null)
+                {
+                    ApplicationRole role= new ApplicationRole() { Name=Core.Enums.UserOptionType.Admin.ToString()};
+                   await _roleManager.CreateAsync(role);//creating the role in to the application role
+                    
+                }
+               await _manager.AddToRoleAsync(user, Core.Enums.UserOptionType.Admin.ToString());//adding the user to the rule
+            }
+            else
+            {
+                await _manager.AddToRoleAsync(user, Core.Enums.UserOptionType.User.ToString());
             }
            await _signInManager.SignInAsync(user,isPersistent:false);
              
