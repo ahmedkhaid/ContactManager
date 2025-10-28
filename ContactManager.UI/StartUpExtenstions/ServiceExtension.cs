@@ -37,6 +37,13 @@ namespace CRUDExample.StartUpExtenstions
             services.AddAuthorization(options =>
             {
                 options.FallbackPolicy=new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                options.AddPolicy("NotAuthorized", policy =>
+                {
+                    policy.RequireAssertion(context =>
+                    {
+                        return !context.User.Identity.IsAuthenticated;
+                    });
+                });
             });
             //cnifigure the cokkies adding which url should be redirected to
             services.ConfigureApplicationCookie(options =>

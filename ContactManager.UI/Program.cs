@@ -33,6 +33,7 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseEndpoints(Endpoint =>
 {
+    Endpoint.MapControllerRoute(name: "areas", pattern: "{area:exists}/{controller}/{action}");
     Endpoint.MapControllerRoute(name: "Default", pattern: "{Controller}/{action}");
 });
 app.Logger.LogCritical("the error is critical");

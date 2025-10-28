@@ -51,7 +51,7 @@
                                             <a asp-controller="Account" asp-action="Register">Register</a>
                                         </li>
                                     }
-                                    if(ViewBag.CurrerntUrl=="~/Account/Login")
+                                    if (ViewBag.CurrerntUrl=="~/Account/Login")
                                     {
                                         <li>
                                             <a asp-controller="Account" asp-action="Login" class="nav-active">Login</a>
@@ -64,8 +64,15 @@
                                         </li>
                                     }
 
-                                  
+
                                 }
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li>
+                                        <a asp-action="Index" asp-controller="Home" asp-area="Admin">Admin</a>
+                                    </li>
+                                }
+
                             </ul>
 
                         </div>
@@ -80,7 +87,7 @@
 
                 <ul>
                     <li>
-                        @if(ViewBag.CurrentUrl=="~/Person/Index")
+                        @if (ViewBag.CurrentUrl=="~/Person/Index")
                         {
                             <a asp-controller="Persons" asp-action="Index" class="nav-active">Persons</a>
                         }
@@ -88,7 +95,7 @@
                         {
                             <a asp-controller="Persons" asp-action="Index">Persons</a>
                         }
-                        @if(ViewBag.CurrentUrl=="~/Countries/UploadFromExcel")
+                        @if (ViewBag.CurrentUrl=="~/Countries/UploadFromExcel")
                         {
                             <a asp-controller="Countries" asp-action="UploadFromExcel" class="nav-active">Upload Countries</a>
                         }
@@ -97,8 +104,8 @@
                             <a asp-controller="Countries" asp-action="UploadFromExcel">Upload Countries</a>
                         }
 
-                      
-                        
+
+
                     </li>
                 </ul>
             </div>

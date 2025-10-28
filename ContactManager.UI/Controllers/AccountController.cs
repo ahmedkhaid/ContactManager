@@ -1,5 +1,6 @@
 ﻿using ContactManager.Core.Domain.IdentityEntites;
 using ContactManager.Core.DTO;
+using ContactManager.Core.Enums;
 using CRUDExample.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -9,7 +10,8 @@ namespace ContactManager.UI.Controllers
 {
     //applying Conventional routing
     //[Route("[controller]/[action]")]
-    [AllowAnonymous]
+    //[AllowAnonymous] allow unconditional access
+ 
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _manager;
@@ -23,11 +25,13 @@ namespace ContactManager.UI.Controllers
             _signInManager=signInManager;
         }
         [HttpGet]
+        [Authorize("NotAuthorized")]
         public IActionResult Register()
         {
             return View();
         }
         [HttpPost]
+        [Authorize("NotAuthorized")]
         public async Task<IActionResult> Register(RegisterDTO dTORegister)
         {
             if (ModelState.IsValid==false) {
@@ -75,12 +79,14 @@ namespace ContactManager.UI.Controllers
 
             //since we are getting the value from controlelr to the view  we can use
         }
+        [Authorize("NotAuthorized")]
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
         [HttpPost]
+        [Authorize("NotAuthorized")]
         public async Task<IActionResult> Login(LoginDTO loginDTO,string?ReturnUrl)
         {
             if (!ModelState.IsValid)
@@ -91,6 +97,13 @@ namespace ContactManager.UI.Controllers
             var result = await _signInManager.PasswordSignInAsync(loginDTO.Email, loginDTO.Password, isPersistent: false, lockoutOnFailure: false);
             if (result.Succeeded)
             {
+                ApplicationUser ?user = await _manager.FindByEmailAsync(loginDTO.Email);
+                if (user != null) {
+                    if(await _manager.IsInRoleAsync(user,UserOptionType.Admin.ToString()))
+                    {
+                        return RedirectToAction("Index", "Home", new { area = "Admin" });
+                    }
+                }
                 if(!string.IsNullOrEmpty(ReturnUrl)&&Url.IsLocalUrl(ReturnUrl))
                 {
                     return LocalRedirect(ReturnUrl);
@@ -102,6 +115,7 @@ namespace ContactManager.UI.Controllers
             return View(loginDTO);
         }
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
