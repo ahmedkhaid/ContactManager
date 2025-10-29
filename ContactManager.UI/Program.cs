@@ -39,6 +39,8 @@ app.UseEndpoints(Endpoint =>
 app.Logger.LogCritical("the error is critical");
 app.Logger.LogDebug("the error need to be debug");
 app.UseHttpLogging();
+app.UseHsts();//if the browser send request the Server send back that we need to create secure channel first 
+app.UseHttpsRedirection();
 app.Run();
 
 //middleware for logging request and response details in the log providers 
