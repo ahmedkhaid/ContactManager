@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using ContactManager.Core.Domain.IdentityEntites;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CRUDExample.StartUpExtenstions
 {
@@ -17,7 +18,10 @@ namespace CRUDExample.StartUpExtenstions
     {
         public static IServiceCollection ConfigureServices(this IServiceCollection services,IConfiguration configuration,IHostBuilder host)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());//adding  anitforgeyTokenForAllPost  request the 
+            });
             services.AddScoped<ICountriesGetterService, CountriesGetterService>();
             services.AddScoped<IPersonsGetterService, PersonGetterService>();
             services.AddScoped<IPersonsAddService, PersonAddService>();
@@ -37,7 +41,7 @@ namespace CRUDExample.StartUpExtenstions
             services.AddAuthorization(options =>
             {
                 options.FallbackPolicy=new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-                options.AddPolicy("NotAuthorized", policy =>
+                options.AddPolicy("NotAuthorized", policy =>//adding new authorization policy  
                 {
                     policy.RequireAssertion(context =>
                     {

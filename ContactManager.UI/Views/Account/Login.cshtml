@@ -9,7 +9,8 @@
     <i class="fa-solid fa-caret-right"></i>
     <span>Login</span>
 </div>
-
+   lost password ? <a asp-action="ResetEmail" asp-controller="Account" class="link-hover">ResetPassword</a>
+<h2 class="text-large">Register</h2>
 <div class="form-container">
 
     <form asp-controller="Account" asp-action="Login" asp-Route-ReturnUrl="@Context.Request.Query["returnUrl"]" method="post">
@@ -38,7 +39,7 @@
             </div>
         </div>
 
-     
+   
 
 
         @*Register button*@
@@ -62,8 +63,9 @@
                 }
             </div>
         </div>
-
+       
     </form>
+   
 </div>
 
 @section scripts
